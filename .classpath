@@ -3,12 +3,9 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="lib" path="lib/apache-log4j-1.2.15/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="lib/castor-1.2/castor-1.2-xml.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.4/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-1.5.2/slf4j-api-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-1.5.2/slf4j-log4j12-1.5.2.jar"/>
-	<classpathentry kind="lib" path="lib/spring-framework-2.5.4/spring.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path=".eclipse-build"/>
 </classpath>

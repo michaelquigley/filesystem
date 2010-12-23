@@ -5,22 +5,20 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilesystemIteratorTest {
-    private static Log log = LogFactory.getLog(FilesystemIteratorTest.class);
-
     @Test
     public void testBasicIteration() throws Exception {
-        FilesystemPath root = new FilesystemPath("bin/");
+        FilesystemPath root = new FilesystemPath("src");
         TestVisitor visitor = new TestVisitor();
         FilesystemIterator iter = new FilesystemIterator(root, visitor);
         iter.iterate();
 
         List<FilesystemPath> pathList = visitor.getPathList();
-        assertTrue(pathList.get(1).asString().equals("bin/webc"));
+        assertTrue(pathList.get(1).asString().equals("src/java"));
     }
 
     private class TestVisitor implements FilesystemVisitor {
@@ -39,4 +37,6 @@ public class FilesystemIteratorTest {
             pathList.add(path);
         }
     }
+    
+    private static Logger log = LoggerFactory.getLogger(FilesystemIteratorTest.class);
 }

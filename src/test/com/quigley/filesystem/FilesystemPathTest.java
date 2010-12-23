@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.quigley.testing.TestFailureException;
-
 public class FilesystemPathTest {
 	@Test
 	public void testRoot() throws Exception {
@@ -89,7 +87,7 @@ public class FilesystemPathTest {
 
         try {
             p.get(3);
-            throw new TestFailureException("Should have thrown IndexOutOfBoundsException!");
+            throw new IllegalArgumentException("Should have thrown IndexOutOfBoundsException!");
         } catch(IndexOutOfBoundsException iobe) {
             //
         }
@@ -122,7 +120,7 @@ public class FilesystemPathTest {
 
         try {
             p1.set(5, "eff");
-            throw new TestFailureException("Should have thrown IndexOutOfBoundsException!");
+            throw new IllegalArgumentException("Should have thrown IndexOutOfBoundsException!");
         } catch(IndexOutOfBoundsException iobe) {
             //
         }
