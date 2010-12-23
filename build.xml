@@ -1,0 +1,122 @@
+<project name="Foundation" default="world">
+	<path id="compile">
+		<fileset dir="lib/castor-1.2/"/>
+		<fileset dir="lib/commons-logging-1.1.1/"/>
+		<fileset dir="lib/spring-framework-2.5.4/"/>
+	</path>
+
+	<target name="world" depends="package, jetty-6.1.10-quigley"/>
+
+	<target name="compile">
+		<mkdir dir="build/classes/"/>
+
+		<javac srcdir="src/java/" destdir="build/classes/" verbose="off" debug="on">
+			<classpath refid="compile"/>
+		</javac>
+	</target>
+
+	<target name="package" depends="compile">
+		<mkdir dir="build/dist/"/>
+
+		<jar jarfile="build/dist/quigley-foundation-1.0.0.jar">
+			<fileset dir="build/classes/"/>
+			<fileset dir="src/java/">
+				<include name="**/Context.xml"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="build/"/>
+	</target>
+
+    <target name="jetty-6.1.10-quigley">
+        <mkdir dir="build/jetty-6.1.10-quigley/"/>
+
+        <unzip src="src/deploy/jetty-6.1.10.zip" dest="build/jetty-6.1.10-quigley/">
+        	<globmapper from="jetty-6.1.10/*" to="server/*"/>
+        </unzip>
+
+    	<delete dir="build/jetty-6.1.10-quigley/server/contexts/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/contrib/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/examples/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/extras/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/javadoc/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/logs/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/LICENSES"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/modules/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/patches/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/project-website/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/resources/"/>
+    	<delete file="build/jetty-6.1.10-quigley/server/README.txt"/>
+    	<delete file="build/jetty-6.1.10-quigley/server/pom.xml"/>
+    	<delete file="build/jetty-6.1.10-quigley/server/VERSION.txt"/>
+
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/annotations/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/cometd/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/jsp-2.0/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/jsp-2.1/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/management/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/win32/"/>
+    	<delete dir="build/jetty-6.1.10-quigley/server/lib/xbean/"/>
+    	<delete>
+    		<fileset dir="build/jetty-6.1.10-quigley/server/lib/ext/">
+    			<include name="jetty-client-6.1.10.jar"/>
+    			<include name="jetty-html-6.1.10.jar"/>
+    			<include name="jetty-servlet-tester-6.1.10.jar"/>
+    			<include name="jetty-setuid-6.1.10.jar"/>
+    			<include name="jetty-sslengine-6.1.10.jar"/>
+    			<include name="libsetuid.so"/>
+    		</fileset>
+    	</delete>
+    	
+    	<copy todir="build/jetty-6.1.10-quigley/server/lib/">
+    		<fileset dir="lib/slf4j-1.5.2/"/>
+    		<fileset dir="lib/apache-log4j-1.2.15/"/>
+    	</copy>
+    	
+		<delete>
+			<fileset dir="build/jetty-6.1.10-quigley/server/etc/">
+				<include name="jetty-*.xml"/>
+				<include name="*.properties"/>
+				<include name="keystore"/>
+    			<include name="login.conf"/>
+			</fileset>
+		</delete>
+    	<copy todir="build/jetty-6.1.10-quigley/server/etc/">
+    		<fileset dir="src/deploy/">
+    			<include name="jetty.xml"/>
+    		</fileset>
+    	</copy>
+    	<copy todir="build/jetty-6.1.10-quigley/server/resources/">
+    		<fileset dir="src/deploy/">
+    			<include name="log4j.properties"/>
+    			<include name="castor.properties"/>
+    		</fileset>
+    	</copy>
+
+    	<delete dir="build/jetty-6.1.10-quigley/server/bin/"/>
+    	<copy todir="build/jetty-6.1.10-quigley/server/bin/">
+    		<fileset dir="src/deploy/">
+    			<include name="*.sh"/>
+    		</fileset>
+    	</copy>
+    	<chmod file="build/jetty-6.1.10-quigley/server/bin/run.sh" perm="755"/>
+    	
+        <delete dir="build/jetty-6.1.10-quigley/server/webapps/"/>
+        <mkdir dir="build/jetty-6.1.10-quigley/server/webapps/"/>
+    	
+    	<zip destfile="build/dist/jetty-6.1.10-quigley.zip">
+    		<fileset dir="build/jetty-6.1.10-quigley/"/>
+    	</zip>
+    </target>
+	
+	<target name="sugar" depends="world">
+		<fail unless="build.outputRoot"/>
+		<fail unless="build.revision"/>
+		
+		<zip destfile="${build.outputRoot}/quigley-foundation-1.0.0.${build.revision}.zip">
+			<fileset dir="build/dist/" />
+		</zip>
+	</target>
+</project>
