@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 public class FilesystemOperation {
-	public static void copy(FilesystemPath source, FilesystemPath dest)
-			throws FilesystemException {
+	public static void copy(FilesystemPath source, FilesystemPath dest) throws FilesystemException {
 		copy(source.asFile(), dest.asFile());
 	}
 
