@@ -195,17 +195,7 @@ public class FilesystemPath {
     }
     
     public String asString() {
-        StringBuilder sb = new StringBuilder();
-        if(isAbsolute) {
-        	sb.append("/");
-        }
-        for(int i = 0; i < elements.size(); i++) {
-            if(i > 0) {
-                sb.append("/");
-            }
-            sb.append(elements.get(i));
-        }
-        return sb.toString();
+    	return toString();
     }
 
     public int size() {
@@ -247,14 +237,12 @@ public class FilesystemPath {
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("FilesystemPath(");
         for(int i = 0; i < elements.size(); i++) {
             if(isAbsolute || i > 0) {
                 sb.append("/");
             }
             sb.append(elements.get(i));
         }
-        sb.append(")");
         return sb.toString();
     }
 
