@@ -49,7 +49,9 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		return excludeTokens;
 	}
 	public void setExcludeTokens(List<String> excludeTokens) {
-		this.excludeTokens = excludeTokens;
+		if(excludeTokens != null) {
+			this.excludeTokens = excludeTokens;
+		}
 	}
 	public void addExcludeToken(String excludeToken) {
 		excludeTokens.add(excludeToken);
@@ -59,7 +61,9 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		return includeTokens;
 	}
 	public void setIncludeTokens(List<String> includeTokens) {
-		this.includeTokens = includeTokens;
+		if(includeTokens != null) {
+			this.includeTokens = includeTokens;
+		}
 	}
 	public void addIncludeToken(String includeToken) {
 		includeTokens.add(includeToken);
