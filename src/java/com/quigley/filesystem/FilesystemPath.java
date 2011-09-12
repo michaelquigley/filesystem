@@ -40,10 +40,17 @@ public class FilesystemPath {
     	this.elements = elements;
     }
 
+    public FilesystemPath toAbsolute() {
+    	FilesystemPath absolutePath = new FilesystemPath(this.asFile().getAbsolutePath());
+    	if(absolutePath.getLast().equals(".")) {
+    		absolutePath = absolutePath.removeLast();
+    	}
+    	return absolutePath;
+    }
+    
     public boolean isAbsolute() {
         return isAbsolute;
     }
-
     public void setAbsolute(boolean absolute) {
         isAbsolute = absolute;
     }

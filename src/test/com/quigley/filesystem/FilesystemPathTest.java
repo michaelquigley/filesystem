@@ -288,4 +288,12 @@ public class FilesystemPathTest {
     	String linkPath = path.navigate(new FilesystemPath("a/d/e"));
     	assertEquals("../d/e", linkPath);
     }
+    
+    @Test
+    public void testToAbsolute1() {
+    	FilesystemPath path = new FilesystemPath(".").toAbsolute();
+    	System.out.println("Absolute: " + path);
+    	path = new FilesystemPath("src/java").toAbsolute();
+    	System.out.println("Absolute: " + path);
+    }
 }
