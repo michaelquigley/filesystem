@@ -18,7 +18,7 @@ public class FilesystemIteratorTest {
         iter.iterate();
 
         List<FilesystemPath> pathList = visitor.getPathList();
-        assertTrue(pathList.get(1).asString().equals("src/java"));
+        assertTrue(pathList.get(1).asString().equals("src/main"));
     }
 
     private class TestVisitor implements FilesystemVisitor {

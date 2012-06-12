@@ -244,11 +244,15 @@ public class FilesystemPath {
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < elements.size(); i++) {
-            if(isAbsolute || i > 0) {
-                sb.append("/");
-            }
-            sb.append(elements.get(i));
+        if(isAbsolute && elements.size() == 0) {
+        	sb.append("/");
+        } else {
+	        for(int i = 0; i < elements.size(); i++) {
+	            if(isAbsolute || i > 0) {
+	                sb.append("/");
+	            }
+	            sb.append(elements.get(i));
+	        }
         }
         return sb.toString();
     }
