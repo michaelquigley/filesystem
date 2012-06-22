@@ -144,6 +144,16 @@ public class FilesystemPath {
     	return new FilesystemPath(removeExtension(this.asString()));
     }
     
+    public FilesystemPath setExtension(String extension) {
+    	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.asString()));
+    	pathCopy = new FilesystemPath(pathCopy.asString() + "." + extension);
+    	return pathCopy;
+    }
+    
+    public FilesystemPath addExtension(String extension) {
+    	return new FilesystemPath(this.asString() + "." + extension);
+    }
+    
     public FilesystemPath parent() {
     	return removeLast();
     }
@@ -159,6 +169,22 @@ public class FilesystemPath {
     	} else {
     		return null;
     	}
+    }
+    
+    public FilesystemPath setLast(String last) {
+    	List<String> elementsCopy = new ArrayList<String>(elements);
+    	
+    	if(elementsCopy.size() > 0) {
+    		elementsCopy.set(elementsCopy.size() - 1, last);
+    		
+    	} else {
+    		elementsCopy.add(last);
+    	}
+    	
+    	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
+    	pathCopy.setAbsolute(isAbsolute);
+    	
+    	return pathCopy;
     }
 
     public String getExtension() {

@@ -42,7 +42,22 @@ public class FilesystemPathTest {
         pathString = "fox";
         assertTrue(FilesystemPath.removeExtension(pathString).equals(pathString));
     }
+    
+    @Test
+    public void testSetExtension() throws Exception {
+    	FilesystemPath path = new FilesystemPath("a/b/c.txt");
+    	path = path.setExtension("html");
+    	assertEquals("html", path.getExtension());
+    	assertEquals("a/b/c.html", path.asString());
+    }
 
+    @Test
+    public void testAddExtension() throws Exception {
+    	FilesystemPath path = new FilesystemPath("a/b/c.txt");
+    	path = path.addExtension("xml");
+    	assertEquals("a/b/c.txt.xml", path.asString());
+    }
+    
     @Test
     public void testAddElement() throws Exception {
         FilesystemPath p = new FilesystemPath("a/b");
@@ -295,5 +310,34 @@ public class FilesystemPathTest {
     	System.out.println("Absolute: " + path);
     	path = new FilesystemPath("src/java").toAbsolute();
     	System.out.println("Absolute: " + path);
+    }
+    
+    @Test
+    public void testGetLast() {
+    	FilesystemPath path = new FilesystemPath("a/b/c");
+    	assertEquals("c", path.getLast());
+    	path = new FilesystemPath("a");
+    	assertEquals("a", path.getLast());
+    	path = new FilesystemPath("/");
+    	assertEquals(null, path.getLast());
+    }
+    
+    @Test
+    public void testSetLast() {
+    	FilesystemPath path = new FilesystemPath("a/b/c");
+    	path = path.setLast("e");
+    	assertEquals(3, path.size());
+    	assertEquals("e", path.getLast());
+    	
+    	path = new FilesystemPath("a");
+    	path = path.setLast("b");
+    	assertEquals(1, path.size());
+    	assertEquals("b", path.getLast());
+    	
+    	path = new FilesystemPath("/");
+    	path = path.setLast("a");
+    	assertEquals(1, path.size());
+    	assertEquals("a", path.getLast());
+    	assertEquals("/a", path.asString());
     }
 }
