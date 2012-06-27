@@ -1,5 +1,3 @@
 .classpath
 .project
-.idea
-glob:*.iml
 target

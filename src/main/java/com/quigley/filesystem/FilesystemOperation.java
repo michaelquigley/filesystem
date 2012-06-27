@@ -17,17 +17,29 @@ public class FilesystemOperation {
 	}
 
 	public static void copy(File source, File dest) throws FilesystemException {
+		FileChannel sourceChannel = null;
+		FileChannel destChannel = null;
 		try {
-			FileChannel sourceChannel = new FileInputStream(source).getChannel();
-			FileChannel destChannel = new FileOutputStream(dest).getChannel();
+			sourceChannel = new FileInputStream(source).getChannel();
+			destChannel = new FileOutputStream(dest).getChannel();
 
 			sourceChannel.transferTo(0, sourceChannel.size(), destChannel);
 
-			sourceChannel.close();
-			destChannel.close();
-
 		} catch (Exception e) {
 			throw new FilesystemException("Unable to copy", e);
+		} finally {
+			if(sourceChannel != null) {
+				try {
+					sourceChannel.close();
+				} catch(IOException ioe) {
+				}
+			}
+			if(destChannel != null) {
+				try {
+					destChannel.close();
+				} catch(IOException ioe) {
+				}
+			}
 		}
 	}
 	
