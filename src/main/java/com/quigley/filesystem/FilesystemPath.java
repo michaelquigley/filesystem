@@ -320,4 +320,12 @@ public class FilesystemPath {
     	
     	return outputPath;
     }
+    
+    public static List<FilesystemPath> removeCommonParent(List<FilesystemPath> paths, FilesystemPath pathComparedTo) {
+    	List<FilesystemPath> trimmedPaths = new ArrayList<FilesystemPath>();
+    	for(FilesystemPath path : paths) {
+    		trimmedPaths.add(FilesystemPath.removeCommonParent(path, pathComparedTo));
+    	}
+    	return trimmedPaths;
+    }
 }

@@ -33,7 +33,11 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		}
 		if(include && !exclude) {
 			if(includeDirectories || !path.asFile().isDirectory()) {
-				paths.add(path);
+				if(rootTrim == null) {
+					paths.add(path);
+				} else {
+					paths.add(FilesystemPath.removeCommonParent(path, rootTrim));
+				}
 			}
 		}
 	}
@@ -69,6 +73,13 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		includeTokens.add(includeToken);
 	}
 
+	public FilesystemPath getRootTrim() {
+		return rootTrim;
+	}
+	public void setRootTrim(FilesystemPath rootTrim) {
+		this.rootTrim = rootTrim;
+	}
+
 	public List<FilesystemPath> getPaths() {
 		return paths;
 	}
@@ -76,6 +87,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 	protected boolean includeDirectories;
 	protected List<String> excludeTokens;
 	protected List<String> includeTokens;
+	protected FilesystemPath rootTrim;
 	
 	protected List<FilesystemPath> paths;
 }
