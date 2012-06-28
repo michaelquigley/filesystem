@@ -6,6 +6,7 @@ import java.util.List;
 public class FilesystemInventoryVisitor implements FilesystemVisitor {
 	public FilesystemInventoryVisitor() {
 		paths = new ArrayList<FilesystemPath>();
+		includeFiles = true;
 		includeDirectories = true;
 		excludeTokens = new ArrayList<String>();
 		includeTokens = new ArrayList<String>();
@@ -32,7 +33,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 			}
 		}
 		if(include && !exclude) {
-			if(includeDirectories || !path.asFile().isDirectory()) {
+			if((path.asFile().isDirectory() && includeDirectories) || (path.asFile().isFile() && includeFiles)) {
 				if(rootTrim == null) {
 					paths.add(path);
 				} else {
@@ -47,6 +48,13 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 	}
 	public void setIncludeDirectories(boolean includeDirectories) {
 		this.includeDirectories = includeDirectories;
+	}
+	
+	public boolean isIncludeFiles() {
+		return includeFiles;
+	}
+	public void setIncludeFiles(boolean includeFiles) {
+		this.includeFiles = includeFiles;
 	}
 
 	public List<String> getExcludeTokens() {
@@ -85,6 +93,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 	}
 
 	protected boolean includeDirectories;
+	protected boolean includeFiles;
 	protected List<String> excludeTokens;
 	protected List<String> includeTokens;
 	protected FilesystemPath rootTrim;
