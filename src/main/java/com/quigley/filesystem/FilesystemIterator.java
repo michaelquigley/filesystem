@@ -3,9 +3,6 @@ package com.quigley.filesystem;
 import java.io.File;
 
 public class FilesystemIterator {
-    private FilesystemPath root;
-    private FilesystemVisitor visitor;
-
     public FilesystemIterator(FilesystemPath root, FilesystemVisitor visitor) {
         this.root = root;
         this.visitor = visitor;
@@ -33,4 +30,7 @@ public class FilesystemIterator {
             throw new FilesystemException(root.asString() + " is not a valid directory!");
         }
     }
+    
+    private FilesystemPath root;
+    private FilesystemVisitor visitor;
 }
