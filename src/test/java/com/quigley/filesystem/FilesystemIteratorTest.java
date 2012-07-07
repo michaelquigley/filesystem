@@ -14,13 +14,25 @@ public class FilesystemIteratorTest {
     public void testBasicIteration() throws Exception {
         FilesystemPath root = new FilesystemPath("src");
         TestVisitor visitor = new TestVisitor();
-        FilesystemIterator iter = new FilesystemIterator(root, visitor);
-        iter.iterate();
+        FilesystemIterator iter = new FilesystemIterator(visitor);
+        iter.iterate(root);
 
         List<FilesystemPath> pathList = visitor.getPathList();
         assertTrue(pathList.get(1).asString().equals("src/main"));
     }
 
+    @Test
+    public void testIterationStartingWithFile() throws Exception {
+    	FilesystemPath root = new FilesystemPath("pom.xml");
+    	TestVisitor visitor = new TestVisitor();
+    	FilesystemIterator iter = new FilesystemIterator(visitor);
+    	iter.iterate(root);
+    	
+    	List<FilesystemPath> pathList = visitor.getPathList();
+    	assertTrue(pathList.size() == 1);
+    	assertTrue(pathList.get(0).asString().equals("pom.xml"));
+    }
+    
     private class TestVisitor implements FilesystemVisitor {
         private List<FilesystemPath> pathList;
 

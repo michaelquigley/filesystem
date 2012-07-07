@@ -48,8 +48,8 @@ public class FilesystemOperation {
 		visitor.setExcludeTokens(excludeTokens);
 		visitor.setIncludeTokens(includeTokens);
 		visitor.setIncludeDirectories(false);
-		FilesystemIterator iterator = new FilesystemIterator(sourceTree, visitor);
-		iterator.iterate();
+		FilesystemIterator iterator = new FilesystemIterator(visitor);
+		iterator.iterate(sourceTree);
 		
 		List<FilesystemPath> copiedFiles = new ArrayList<FilesystemPath>();
 		for(FilesystemPath sourcePath : visitor.getPaths()) {

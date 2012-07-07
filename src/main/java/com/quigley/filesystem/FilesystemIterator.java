@@ -3,34 +3,29 @@ package com.quigley.filesystem;
 import java.io.File;
 
 public class FilesystemIterator {
-    public FilesystemIterator(FilesystemPath root, FilesystemVisitor visitor) {
-        this.root = root;
+    public FilesystemIterator(FilesystemVisitor visitor) {
         this.visitor = visitor;
     }
 
-    public void iterate() throws FilesystemException {
-        File rootF = root.asFile();
-        if(rootF.exists() && rootF.canRead() && rootF.isDirectory()) {
-            visitor.visit(root);
-
-            File[] contents = rootF.listFiles();
-            for(File f : contents) {
-                FilesystemPath fPath = new FilesystemPath(root).add(f.getName());
-
-                if(f.isDirectory()) {
-                    FilesystemIterator subIter = new FilesystemIterator(fPath, visitor);
-                    subIter.iterate();
-
-                } else {
-                    visitor.visit(fPath);
-                }
-            }
-
-        } else {
-            throw new FilesystemException(root.asString() + " is not a valid directory!");
-        }
+    public void iterate(FilesystemPath path) throws FilesystemException {
+    	File pathF = path.asFile();
+    	if(pathF.exists() && pathF.canRead()) {
+    		if(pathF.isDirectory()) {
+    			visitor.visit(path);
+    			
+    			File[] contents = pathF.listFiles();
+    			for(File f : contents) {
+    				FilesystemPath fPath = new FilesystemPath(path).add(f.getName());
+    				visitor.visit(fPath);
+    			}
+    		} else {
+    			visitor.visit(path);
+    		}
+    		
+    	} else {
+    		throw new FilesystemException("Unable to read '" + path.asString() + "'!");
+    	}
     }
     
-    private FilesystemPath root;
     private FilesystemVisitor visitor;
 }
