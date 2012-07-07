@@ -10,16 +10,13 @@ public class FilesystemIterator {
     public void iterate(FilesystemPath path) throws FilesystemException {
     	File pathF = path.asFile();
     	if(pathF.exists() && pathF.canRead()) {
+    		visitor.visit(path);
     		if(pathF.isDirectory()) {
-    			visitor.visit(path);
-    			
     			File[] contents = pathF.listFiles();
     			for(File f : contents) {
     				FilesystemPath fPath = new FilesystemPath(path).add(f.getName());
-    				visitor.visit(fPath);
+    				iterate(fPath);
     			}
-    		} else {
-    			visitor.visit(path);
     		}
     		
     	} else {
