@@ -66,14 +66,6 @@ public class FilesystemPath {
         return pathCopy;
     }
     
-    public FilesystemPath add(int element) {
-    	return add("" + element);
-    }
-    
-    public FilesystemPath add(long element) {
-    	return add("" + element);
-    }
-
     public FilesystemPath add(FilesystemPath p) {
     	List<String> elementsCopy = new ArrayList<String>(elements);
     	

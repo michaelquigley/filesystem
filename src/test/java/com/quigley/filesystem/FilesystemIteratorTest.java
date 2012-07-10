@@ -33,6 +33,12 @@ public class FilesystemIteratorTest {
     	assertTrue(pathList.get(0).asString().equals("pom.xml"));
     }
     
+    @Test(expected = FilesystemException.class)
+    public void testIterationStartingWithInvalid() {
+    	FilesystemIterator iter = new FilesystemIterator(null);
+    	iter.iterate(new FilesystemPath("/in/va/li/d"));
+    }
+    
     private class TestVisitor implements FilesystemVisitor {
         private List<FilesystemPath> pathList;
 
