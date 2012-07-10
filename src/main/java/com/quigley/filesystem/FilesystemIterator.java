@@ -32,9 +32,11 @@ public class FilesystemIterator {
     }
 
 	private void visit(FilesystemPath path) {
-    	for(FilesystemVisitor visitor : visitors) {
-    		visitor.visit(path);
-    	}
+		if(visitors != null) {
+	    	for(FilesystemVisitor visitor : visitors) {
+	    		visitor.visit(path);
+	    	}
+		}
     }
 
     public List<FilesystemVisitor> getVisitors() {

@@ -14,7 +14,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 	
 	public void visit(FilesystemPath path) {
 		boolean include = true;
-		if(includeTokens.size() > 0) {
+		if(includeTokens != null && includeTokens.size() > 0) {
 			include = false;
 			for(String includeToken : includeTokens) {
 				if(path.asString().indexOf(includeToken) != -1) {
@@ -24,7 +24,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 			}
 		}
 		boolean exclude = false;
-		if(excludeTokens.size() > 0) {
+		if(excludeTokens != null && excludeTokens.size() > 0) {
 			for(String excludeToken : excludeTokens) {
 				if(path.asString().indexOf(excludeToken) != -1) {
 					exclude = true;
