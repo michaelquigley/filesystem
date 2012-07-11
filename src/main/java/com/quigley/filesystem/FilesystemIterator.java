@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.quigley.filesystem.visitor.FilesystemVisitor;
+
 public class FilesystemIterator {
 	public FilesystemIterator() {
 		visitors = new ArrayList<FilesystemVisitor>();
@@ -27,7 +29,7 @@ public class FilesystemIterator {
     		}
     		
     	} else {
-    		throw new FilesystemException("Unable to read '" + path.asString() + "'!");
+    		throw new FilesystemException("Unable to read '" + path.toString() + "'!");
     	}
     }
 

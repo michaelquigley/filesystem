@@ -1,4 +1,6 @@
-package com.quigley.filesystem;
+package com.quigley.filesystem.visitor;
+
+import com.quigley.filesystem.FilesystemPath;
 
 public class FilesystemModificationVisitor implements FilesystemVisitor {
 	public void visit(FilesystemPath path) {

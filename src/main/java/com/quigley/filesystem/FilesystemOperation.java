@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.quigley.filesystem.utils.StreamCopier;
+import com.quigley.filesystem.visitor.FilesystemInventoryVisitor;
 
 public class FilesystemOperation {
 	public static void copy(FilesystemPath source, FilesystemPath dest) throws FilesystemException {

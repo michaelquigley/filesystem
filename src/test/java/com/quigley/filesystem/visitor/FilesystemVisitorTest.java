@@ -1,8 +1,12 @@
-package com.quigley.filesystem;
+package com.quigley.filesystem.visitor;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.quigley.filesystem.FilesystemIterator;
+import com.quigley.filesystem.FilesystemPath;
+import com.quigley.filesystem.utils.FilesystemSizeFormatter;
 
 public class FilesystemVisitorTest {
 	@Test

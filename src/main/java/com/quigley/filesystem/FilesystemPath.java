@@ -6,9 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FilesystemPath {
-    private boolean isAbsolute;
-    private List<String> elements;
-
+	
+	/*
+	 * Constructors
+	 */
+	
     public FilesystemPath(String pathString) {
         pathString = FilesystemPath.normalize(pathString);
         if(pathString.length() == 0) {
@@ -39,6 +41,10 @@ public class FilesystemPath {
     public FilesystemPath(List<String> elements) {
     	this.elements = elements;
     }
+    
+    /*
+     * Absolute
+     */
 
     public FilesystemPath toAbsolute() {
     	FilesystemPath absolutePath = new FilesystemPath(this.asFile().getAbsolutePath());
@@ -55,6 +61,10 @@ public class FilesystemPath {
         isAbsolute = absolute;
     }
 
+    /*
+     * Modifiers
+     */
+    
     public FilesystemPath add(String element) {
     	List<String> elementsCopy = new ArrayList<String>(elements);
     	
@@ -132,37 +142,6 @@ public class FilesystemPath {
     	return pathCopy;
     }
     
-    public FilesystemPath removeExtension() {
-    	return new FilesystemPath(removeExtension(this.asString()));
-    }
-    
-    public FilesystemPath setExtension(String extension) {
-    	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.asString()));
-    	pathCopy = new FilesystemPath(pathCopy.asString() + "." + extension);
-    	return pathCopy;
-    }
-    
-    public FilesystemPath addExtension(String extension) {
-    	return new FilesystemPath(this.asString() + "." + extension);
-    }
-    
-    public FilesystemPath parent() {
-    	return removeLast();
-    }
-
-    public String get(int index) {
-        return elements.get(index);
-    }
-    
-    public String getLast() {
-    	if(size() > 0) {
-    		return elements.get(elements.size() - 1);
-    		
-    	} else {
-    		return null;
-    	}
-    }
-    
     public FilesystemPath setLast(String last) {
     	List<String> elementsCopy = new ArrayList<String>(elements);
     	
@@ -178,7 +157,48 @@ public class FilesystemPath {
     	
     	return pathCopy;
     }
+    
+    public FilesystemPath removeCommonParent(FilesystemPath otherPath) {
+    	FilesystemPath outputPath = this;
+    	FilesystemPath parallelPath = otherPath;
+    	
+    	while(outputPath.size() > 0 && parallelPath.size() > 0 && outputPath.get(0).equals(parallelPath.get(0))) {
+    		outputPath = outputPath.removeFirst();
+    		parallelPath = parallelPath.removeFirst();
+    	}
+    	
+    	return outputPath;
+    }
 
+    /*
+     * Component Accessors
+     */
+    
+    public FilesystemPath parent() {
+    	return removeLast();
+    }
+
+    public int size() {
+        return elements.size();
+    }    
+    
+    public String get(int index) {
+        return elements.get(index);
+    }
+    
+    public String getLast() {
+    	if(size() > 0) {
+    		return elements.get(elements.size() - 1);
+    		
+    	} else {
+    		return null;
+    	}
+    }
+
+    /*
+     * Extension
+     */
+    
     public String getExtension() {
         if(elements.size() < 1) {
             return null;
@@ -192,6 +212,24 @@ public class FilesystemPath {
         }
     }    
     
+    public FilesystemPath removeExtension() {
+    	return new FilesystemPath(removeExtension(this.toString()));
+    }
+    
+    public FilesystemPath setExtension(String extension) {
+    	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.toString()));
+    	pathCopy = new FilesystemPath(pathCopy.toString() + "." + extension);
+    	return pathCopy;
+    }
+    
+    public FilesystemPath addExtension(String extension) {
+    	return new FilesystemPath(this.toString() + "." + extension);
+    }
+    
+    /*
+     * Matching 
+     */
+    
     public boolean contains(String match) {
     	for(String element : elements) {
     		if(element.equals(match)) {
@@ -201,34 +239,9 @@ public class FilesystemPath {
     	return false;
     }
     
-    public String navigate(FilesystemPath toPath) {
-    	if(toPath.asString().equals(this.asString())) {
-    		return this.getLast();
-    	}
-    	
-		StringBuilder p = new StringBuilder();
 
-		FilesystemPath shortenedCurrentPath = FilesystemPath.removeCommonParent(this, toPath);
-		for(int i = 0; i < shortenedCurrentPath.size() - 1; i++) {
-			p.append("../");
-		}
-		
-		FilesystemPath shortenedTargetPath = FilesystemPath.removeCommonParent(toPath, this);
-		p.append(shortenedTargetPath.asString());
-		
-		return p.toString();    	
-    }
-    
-    public String asString() {
-    	return toString();
-    }
-
-    public int size() {
-        return elements.size();
-    }    
-    
     public File asFile() {
-        return new File(this.asString());
+        return new File(this.toString());
     }
 
     @Override
@@ -275,8 +288,11 @@ public class FilesystemPath {
         return sb.toString();
     }
 
+    private boolean isAbsolute;
+    private List<String> elements;
+	
     /*
-     * Static filesystem path operations.
+     * Static Operations
      */
     
     public static String normalize(String pathString) {
@@ -292,7 +308,7 @@ public class FilesystemPath {
         return pathString;
     }
 
-    public static String removeExtension(String pathString) {
+    private static String removeExtension(String pathString) {
         int extensionStartIndex = pathString.lastIndexOf(".");
         if(extensionStartIndex != -1) {
             return pathString.substring(0, extensionStartIndex);
@@ -301,22 +317,10 @@ public class FilesystemPath {
         }
     }
     
-    public static FilesystemPath removeCommonParent(FilesystemPath path, FilesystemPath pathComparedTo) {
-    	FilesystemPath outputPath = path;
-    	FilesystemPath parallelPath = pathComparedTo;
-    	
-    	while(outputPath.size() > 0 && parallelPath.size() > 0 && outputPath.get(0).equals(parallelPath.get(0))) {
-    		outputPath = outputPath.removeFirst();
-    		parallelPath = parallelPath.removeFirst();
-    	}
-    	
-    	return outputPath;
-    }
-    
-    public static List<FilesystemPath> removeCommonParent(List<FilesystemPath> paths, FilesystemPath pathComparedTo) {
+    public static List<FilesystemPath> removeCommonParent(List<FilesystemPath> paths, FilesystemPath otherPath) {
     	List<FilesystemPath> trimmedPaths = new ArrayList<FilesystemPath>();
     	for(FilesystemPath path : paths) {
-    		trimmedPaths.add(FilesystemPath.removeCommonParent(path, pathComparedTo));
+    		trimmedPaths.add(path.removeCommonParent(otherPath));
     	}
     	return trimmedPaths;
     }

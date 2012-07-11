@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.quigley.filesystem.visitor.FilesystemVisitor;
+
 public class FilesystemIteratorTest {
     @Test
     public void testBasicIteration() throws Exception {
@@ -18,7 +20,7 @@ public class FilesystemIteratorTest {
         iter.iterate(root);
 
         List<FilesystemPath> pathList = visitor.getPathList();
-        assertTrue(pathList.get(1).asString().equals("src/main"));
+        assertTrue(pathList.get(1).toString().equals("src/main"));
     }
 
     @Test
@@ -30,7 +32,7 @@ public class FilesystemIteratorTest {
     	
     	List<FilesystemPath> pathList = visitor.getPathList();
     	assertTrue(pathList.size() == 1);
-    	assertTrue(pathList.get(0).asString().equals("pom.xml"));
+    	assertTrue(pathList.get(0).toString().equals("pom.xml"));
     }
     
     @Test(expected = FilesystemException.class)
@@ -51,7 +53,7 @@ public class FilesystemIteratorTest {
         }
 
         public void visit(FilesystemPath path) {
-            log.info("Visited: " + path.asString());
+            log.info("Visited: " + path.toString());
             pathList.add(path);
         }
     }

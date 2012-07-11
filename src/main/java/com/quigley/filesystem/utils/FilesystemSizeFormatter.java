@@ -1,4 +1,4 @@
-package com.quigley.filesystem;
+package com.quigley.filesystem.utils;
 
 import java.text.DecimalFormat;
 
