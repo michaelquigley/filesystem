@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FilesystemPath {
+public class FilesystemPath implements Comparable<FilesystemPath> {
 	
 	/*
 	 * Constructors
@@ -243,8 +243,13 @@ public class FilesystemPath {
     public File asFile() {
         return new File(this.toString());
     }
-
+    
     @Override
+	public int compareTo(FilesystemPath arg0) {
+		return toString().compareTo(arg0.toString());
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
