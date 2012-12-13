@@ -17,6 +17,10 @@ public class FilesystemIterator {
     }
 
     public void iterate(FilesystemPath path) throws FilesystemException {
+    	iterate(path, true);
+    }
+    
+    public void iterate(FilesystemPath path, boolean recursive) throws FilesystemException {
     	File pathF = path.asFile();
     	if(pathF.exists() && pathF.canRead()) {
     		visit(path);
@@ -24,7 +28,11 @@ public class FilesystemIterator {
     			File[] contents = pathF.listFiles();
     			for(File f : contents) {
     				FilesystemPath fPath = new FilesystemPath(path).add(f.getName());
-    				iterate(fPath);
+    				if(recursive) {
+    					iterate(fPath, recursive);
+    				} else {
+    					visit(fPath);
+    				}
     			}
     		}
     		
@@ -41,7 +49,7 @@ public class FilesystemIterator {
 		}
     }
 
-    public List<FilesystemVisitor> getVisitors() {
+	public List<FilesystemVisitor> getVisitors() {
 		return visitors;
 	}
 	public void setVisitors(List<FilesystemVisitor> visitors) {
@@ -50,6 +58,6 @@ public class FilesystemIterator {
 	public void addVisitor(FilesystemVisitor visitor) {
 		visitors.add(visitor);
 	}
-	
+
     private List<FilesystemVisitor> visitors;
 }
