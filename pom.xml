@@ -12,11 +12,11 @@
 
 	<packaging>jar</packaging>
 
-	<name>Filesystem Framework</name>
-	<version>0.0.2</version>
+	<name>Filesystem</name>
+	<version>0.0.3</version>
 	<url>http://www.quigley.com/</url>
 	<description>
-		The Filesystem Framework provides smart file system path manipulation functions, and provides operations for working on file system trees.
+		The Filesystem framework provides simple file system path manipulation functions, and provides components for working with trees of files.
 	</description>
 	<licenses>
 		<license>
