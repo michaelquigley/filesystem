@@ -8,7 +8,7 @@ public class FilesystemPathTest {
 	@Test
 	public void testRoot() throws Exception {
 		FilesystemPath path = new FilesystemPath("/");
-		assertTrue(path.asString().equals("/"));
+		assertTrue(path.toString().equals("/"));
 		assertTrue(path.size() == 0);
 		assertTrue(path.isAbsolute());
 	}
@@ -17,7 +17,7 @@ public class FilesystemPathTest {
     public void testZero() throws Exception {
         String pathString = "the/quick/brown/fox";
         FilesystemPath fsp = new FilesystemPath(pathString);
-        assertTrue(fsp.asString().equals(pathString));
+        assertTrue(fsp.toString().equals(pathString));
         assertTrue(fsp.size() == 4);
         assertTrue(!fsp.isAbsolute());
     }
@@ -26,37 +26,40 @@ public class FilesystemPathTest {
     public void testOne() throws Exception {
         String pathString = "\\the/quick\\brown/////fox\\";
         FilesystemPath fsp = new FilesystemPath(pathString);
-        assertTrue(fsp.asString().equals("/the/quick/brown/fox"));
+        assertTrue(fsp.toString().equals("/the/quick/brown/fox"));
         assertTrue(fsp.size() == 4);
         assertTrue(fsp.isAbsolute());
     }
 
     @Test
-    public void testRemoveExtension() throws Exception {
-        String pathString = "/the/quick/brown/fox.txt";
-        assertTrue(FilesystemPath.removeExtension(pathString).equals("/the/quick/brown/fox"));
-
-        pathString = "/the/quick/brown/fox.txt.txt";
-        assertTrue(FilesystemPath.removeExtension(pathString).equals("/the/quick/brown/fox.txt"));
-
-        pathString = "fox";
-        assertTrue(FilesystemPath.removeExtension(pathString).equals(pathString));
+    public void testSetExtension() throws Exception {
+    	FilesystemPath path = new FilesystemPath("a/b/c.txt");
+    	path = path.setExtension("html");
+    	assertEquals("html", path.getExtension());
+    	assertEquals("a/b/c.html", path.toString());
     }
 
+    @Test
+    public void testAddExtension() throws Exception {
+    	FilesystemPath path = new FilesystemPath("a/b/c.txt");
+    	path = path.addExtension("xml");
+    	assertEquals("a/b/c.txt.xml", path.toString());
+    }
+    
     @Test
     public void testAddElement() throws Exception {
         FilesystemPath p = new FilesystemPath("a/b");
         FilesystemPath p1 = p.add("c");
-        assertTrue(p.asString().equals("a/b"));
-        assertTrue(p1.asString().equals("a/b/c"));
+        assertTrue(p.toString().equals("a/b"));
+        assertTrue(p1.toString().equals("a/b/c"));
     }
     
     @Test
     public void testAddElementAbsolute() throws Exception {
     	FilesystemPath p = new FilesystemPath("/a/b");
     	FilesystemPath p1 = p.add("c");
-    	assertTrue(p.asString().equals("/a/b"));
-    	assertTrue(p1.asString().equals("/a/b/c"));
+    	assertTrue(p.toString().equals("/a/b"));
+    	assertTrue(p1.toString().equals("/a/b/c"));
     	assertTrue(p1.isAbsolute());
     }
 
@@ -65,7 +68,7 @@ public class FilesystemPathTest {
         FilesystemPath p = new FilesystemPath("a/b");
         FilesystemPath q = new FilesystemPath("c/d");
         FilesystemPath p1 = p.add(q);
-        assertTrue(p1.asString().equals("a/b/c/d"));
+        assertTrue(p1.toString().equals("a/b/c/d"));
     }
     
     @Test
@@ -73,8 +76,8 @@ public class FilesystemPathTest {
         FilesystemPath p = new FilesystemPath("/a/b");
         FilesystemPath q = new FilesystemPath("c/d");
         FilesystemPath p1 = p.add(q);
-        assertTrue(p.asString().equals("/a/b"));
-        assertTrue(p1.asString().equals("/a/b/c/d"));
+        assertTrue(p.toString().equals("/a/b"));
+        assertTrue(p1.toString().equals("/a/b/c/d"));
         assertTrue(p1.isAbsolute());
     }
 
@@ -116,7 +119,7 @@ public class FilesystemPathTest {
     public void testSet() throws Exception {
         FilesystemPath p = new FilesystemPath("a/b/c");
         FilesystemPath p1 = p.set(1, "bee");
-        assertTrue(p1.asString().equals("a/bee/c"));
+        assertTrue(p1.toString().equals("a/bee/c"));
 
         try {
             p1.set(5, "eff");
@@ -129,79 +132,79 @@ public class FilesystemPathTest {
     @Test
     public void testAdd() throws Exception {
         FilesystemPath p = new FilesystemPath("a/b/c").add("d");
-        assertTrue(p.asString().equals("a/b/c/d"));
+        assertTrue(p.toString().equals("a/b/c/d"));
     }
     
     @Test
     public void testAddAbsolute() throws Exception {
     	FilesystemPath p = new FilesystemPath("/a/b/c").add("d");
-    	assertTrue(p.asString().equals("/a/b/c/d"));
+    	assertTrue(p.toString().equals("/a/b/c/d"));
     }
 
     @Test
     public void testCopyConstructor() {
         FilesystemPath source = new FilesystemPath("a/b/c");
         FilesystemPath dest = new FilesystemPath(source);
-        assertTrue(dest.asString().equals("a/b/c"));
+        assertTrue(dest.toString().equals("a/b/c"));
     }
     
     @Test
     public void testCopyConstructorAbsolute() {
     	FilesystemPath source = new FilesystemPath("/a/b/c");
     	FilesystemPath dest = new FilesystemPath(source);
-    	assertTrue(dest.asString().equals("/a/b/c"));
+    	assertTrue(dest.toString().equals("/a/b/c"));
     	assertTrue(dest.isAbsolute());
     }
     
     @Test
     public void testRemove() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.remove(1).asString().equals("a/c"));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.remove(1).toString().equals("a/c"));
+    	assertTrue(source.toString().equals("a/b/c"));
     }
     
     @Test
     public void testRemoveFirst() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.removeFirst().asString().equals("b/c"));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.removeFirst().toString().equals("b/c"));
+    	assertTrue(source.toString().equals("a/b/c"));
     }
     
     @Test
     public void testRemoveFirst1() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.removeFirst().asString().equals(source.removeFirst(1).asString()));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.removeFirst().toString().equals(source.removeFirst(1).toString()));
+    	assertTrue(source.toString().equals("a/b/c"));
     }
     
     @Test
     public void testRemoveFirst2() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.removeFirst(2).asString().equals("c"));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.removeFirst(2).toString().equals("c"));
+    	assertTrue(source.toString().equals("a/b/c"));
     }    
     
     @Test
     public void testRemoveFirst3() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.removeFirst(3).asString().equals(""));
+    	assertTrue(source.removeFirst(3).toString().equals(""));
     	
     	source = new FilesystemPath("/a/b/c");
-    	assertTrue(source.removeFirst(3).asString().equals(""));
+    	assertTrue(source.removeFirst(3).toString().equals(""));
     }
     
     @Test
     public void testRemoveLast() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.removeLast().asString().equals("a/b"));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.removeLast().toString().equals("a/b"));
+    	assertTrue(source.toString().equals("a/b/c"));
     }
     
     @Test
     public void testParent() {
     	FilesystemPath source = new FilesystemPath("a/b/c");
-    	assertTrue(source.parent().asString().equals("a/b"));
-    	assertTrue(source.asString().equals("a/b/c"));
+    	assertTrue(source.parent().toString().equals("a/b"));
+    	assertTrue(source.toString().equals("a/b/c"));
     }
     
     @Test
@@ -209,10 +212,10 @@ public class FilesystemPathTest {
     	FilesystemPath path = new FilesystemPath("a/b/c/e1");
     	FilesystemPath anotherPath = new FilesystemPath("a/b/c/f");
     	
-    	FilesystemPath relativePath = FilesystemPath.removeCommonParent(path, anotherPath);
-    	assertTrue(relativePath.asString().equals("e1"));
-    	assertTrue(path.asString().equals("a/b/c/e1"));
-    	assertTrue(anotherPath.asString().equals("a/b/c/f"));
+    	FilesystemPath relativePath = path.removeCommonParent(anotherPath);
+    	assertTrue(relativePath.toString().equals("e1"));
+    	assertTrue(path.toString().equals("a/b/c/e1"));
+    	assertTrue(anotherPath.toString().equals("a/b/c/f"));
     }
     
     @Test
@@ -220,14 +223,14 @@ public class FilesystemPathTest {
     	FilesystemPath path = new FilesystemPath("a/b/c/d");
     	FilesystemPath anotherPath = new FilesystemPath("b/c/d/e");
     	
-    	FilesystemPath relativePath = FilesystemPath.removeCommonParent(path, anotherPath);
-    	assertTrue(relativePath.asString().equals("a/b/c/d"));
+    	FilesystemPath relativePath = path.removeCommonParent(anotherPath);
+    	assertTrue(relativePath.toString().equals("a/b/c/d"));
     }
     
     @Test
     public void testRemoveCommonParentWithOnlyCommonality() {
     	FilesystemPath path = new FilesystemPath("a/b/c/d");
-    	FilesystemPath relativePath = FilesystemPath.removeCommonParent(path, path);
+    	FilesystemPath relativePath = path.removeCommonParent(path);
     	assertTrue(relativePath.size() == 0);
     }
     
@@ -235,7 +238,7 @@ public class FilesystemPathTest {
     public void testRemoveCommonParentWithShorterTarget() {
     	FilesystemPath path = new FilesystemPath("a/b");
     	FilesystemPath anotherPath = new FilesystemPath("a/b/c/d");
-    	FilesystemPath relativePath = FilesystemPath.removeCommonParent(path, anotherPath);
+    	FilesystemPath relativePath = path.removeCommonParent(anotherPath);
     	assertTrue(relativePath.size() == 0);
     }
     
@@ -243,50 +246,8 @@ public class FilesystemPathTest {
     public void testRemoveCommonParentWithShorterComparison() {
     	FilesystemPath path = new FilesystemPath("a/b/c/d");
     	FilesystemPath anotherPath = new FilesystemPath("a/b");
-    	FilesystemPath relativePath = FilesystemPath.removeCommonParent(path, anotherPath);
-    	assertTrue(relativePath.asString().equals("c/d"));
-    }
-    
-    @Test
-    public void testNavigate0() {
-    	FilesystemPath path = new FilesystemPath("a");
-    	String linkPath = path.navigate(new FilesystemPath("a"));
-    	assertEquals("a", linkPath);
-    }
-    
-    @Test
-    public void testNavigate1() {
-    	FilesystemPath path = new FilesystemPath("a");
-    	String linkPath = path.navigate(new FilesystemPath("b"));
-    	assertEquals("b", linkPath);
-    }
-    
-    @Test
-    public void testNavigate2() {
-    	FilesystemPath path = new FilesystemPath("a/b");
-    	String linkPath = path.navigate(new FilesystemPath("a/c"));
-    	assertEquals("c", linkPath);
-    }
-    
-    @Test
-    public void testNavigate3() {
-    	FilesystemPath path = new FilesystemPath("a");
-    	String linkPath = path.navigate(new FilesystemPath("b/c"));
-    	assertEquals("b/c", linkPath);
-    }
-    
-    @Test
-    public void testNavigate4() {
-    	FilesystemPath path = new FilesystemPath("b/c");
-    	String linkPath = path.navigate(new FilesystemPath("a"));
-    	assertEquals("../a", linkPath);
-    }
-    
-    @Test
-    public void testNavigate5() {
-    	FilesystemPath path = new FilesystemPath("a/b/c");
-    	String linkPath = path.navigate(new FilesystemPath("a/d/e"));
-    	assertEquals("../d/e", linkPath);
+    	FilesystemPath relativePath = path.removeCommonParent(anotherPath);
+    	assertTrue(relativePath.toString().equals("c/d"));
     }
     
     @Test
@@ -295,5 +256,34 @@ public class FilesystemPathTest {
     	System.out.println("Absolute: " + path);
     	path = new FilesystemPath("src/java").toAbsolute();
     	System.out.println("Absolute: " + path);
+    }
+    
+    @Test
+    public void testGetLast() {
+    	FilesystemPath path = new FilesystemPath("a/b/c");
+    	assertEquals("c", path.getLast());
+    	path = new FilesystemPath("a");
+    	assertEquals("a", path.getLast());
+    	path = new FilesystemPath("/");
+    	assertEquals(null, path.getLast());
+    }
+    
+    @Test
+    public void testSetLast() {
+    	FilesystemPath path = new FilesystemPath("a/b/c");
+    	path = path.setLast("e");
+    	assertEquals(3, path.size());
+    	assertEquals("e", path.getLast());
+    	
+    	path = new FilesystemPath("a");
+    	path = path.setLast("b");
+    	assertEquals(1, path.size());
+    	assertEquals("b", path.getLast());
+    	
+    	path = new FilesystemPath("/");
+    	path = path.setLast("a");
+    	assertEquals(1, path.size());
+    	assertEquals("a", path.getLast());
+    	assertEquals("/a", path.toString());
     }
 }

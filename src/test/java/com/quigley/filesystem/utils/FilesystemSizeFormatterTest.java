@@ -1,6 +1,9 @@
-package com.quigley.filesystem;
+package com.quigley.filesystem.utils;
 
 import org.junit.Test;
+
+import com.quigley.filesystem.utils.FilesystemSizeFormatter;
+
 import static org.junit.Assert.*;
 
 public class FilesystemSizeFormatterTest {

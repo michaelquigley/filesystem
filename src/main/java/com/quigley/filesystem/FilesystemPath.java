@@ -1,3 +1,20 @@
+/*
+    This file is part of Filesystem.
+
+    Filesystem is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as 
+    published by the Free Software Foundation, either version 3 of 
+    the License, or (at your option) any later version.
+
+    Filesystem is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public 
+    License along with Moose.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.quigley.filesystem;
 
 import java.io.File;
@@ -5,10 +22,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FilesystemPath {
-    private boolean isAbsolute;
-    private List<String> elements;
-
+public class FilesystemPath implements Comparable<FilesystemPath> {
+	
+	/*
+	 * Constructors
+	 */
+	
     public FilesystemPath(String pathString) {
         pathString = FilesystemPath.normalize(pathString);
         if(pathString.length() == 0) {
@@ -39,6 +58,10 @@ public class FilesystemPath {
     public FilesystemPath(List<String> elements) {
     	this.elements = elements;
     }
+    
+    /*
+     * Absolute
+     */
 
     public FilesystemPath toAbsolute() {
     	FilesystemPath absolutePath = new FilesystemPath(this.asFile().getAbsolutePath());
@@ -55,6 +78,10 @@ public class FilesystemPath {
         isAbsolute = absolute;
     }
 
+    /*
+     * Modifiers
+     */
+    
     public FilesystemPath add(String element) {
     	List<String> elementsCopy = new ArrayList<String>(elements);
     	
@@ -66,14 +93,6 @@ public class FilesystemPath {
         return pathCopy;
     }
     
-    public FilesystemPath add(int element) {
-    	return add("" + element);
-    }
-    
-    public FilesystemPath add(long element) {
-    	return add("" + element);
-    }
-
     public FilesystemPath add(FilesystemPath p) {
     	List<String> elementsCopy = new ArrayList<String>(elements);
     	
@@ -140,14 +159,46 @@ public class FilesystemPath {
     	return pathCopy;
     }
     
-    public FilesystemPath removeExtension() {
-    	return new FilesystemPath(removeExtension(this.asString()));
+    public FilesystemPath setLast(String last) {
+    	List<String> elementsCopy = new ArrayList<String>(elements);
+    	
+    	if(elementsCopy.size() > 0) {
+    		elementsCopy.set(elementsCopy.size() - 1, last);
+    		
+    	} else {
+    		elementsCopy.add(last);
+    	}
+    	
+    	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
+    	pathCopy.setAbsolute(isAbsolute);
+    	
+    	return pathCopy;
     }
+    
+    public FilesystemPath removeCommonParent(FilesystemPath otherPath) {
+    	FilesystemPath outputPath = this;
+    	FilesystemPath parallelPath = otherPath;
+    	
+    	while(outputPath.size() > 0 && parallelPath.size() > 0 && outputPath.get(0).equals(parallelPath.get(0))) {
+    		outputPath = outputPath.removeFirst();
+    		parallelPath = parallelPath.removeFirst();
+    	}
+    	
+    	return outputPath;
+    }
+
+    /*
+     * Component Accessors
+     */
     
     public FilesystemPath parent() {
     	return removeLast();
     }
 
+    public int size() {
+        return elements.size();
+    }    
+    
     public String get(int index) {
         return elements.get(index);
     }
@@ -161,6 +212,10 @@ public class FilesystemPath {
     	}
     }
 
+    /*
+     * Extension
+     */
+    
     public String getExtension() {
         if(elements.size() < 1) {
             return null;
@@ -174,6 +229,24 @@ public class FilesystemPath {
         }
     }    
     
+    public FilesystemPath removeExtension() {
+    	return new FilesystemPath(removeExtension(this.toString()));
+    }
+    
+    public FilesystemPath setExtension(String extension) {
+    	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.toString()));
+    	pathCopy = new FilesystemPath(pathCopy.toString() + "." + extension);
+    	return pathCopy;
+    }
+    
+    public FilesystemPath addExtension(String extension) {
+    	return new FilesystemPath(this.toString() + "." + extension);
+    }
+    
+    /*
+     * Matching 
+     */
+    
     public boolean contains(String match) {
     	for(String element : elements) {
     		if(element.equals(match)) {
@@ -183,37 +256,17 @@ public class FilesystemPath {
     	return false;
     }
     
-    public String navigate(FilesystemPath toPath) {
-    	if(toPath.asString().equals(this.asString())) {
-    		return this.getLast();
-    	}
-    	
-		StringBuilder p = new StringBuilder();
 
-		FilesystemPath shortenedCurrentPath = FilesystemPath.removeCommonParent(this, toPath);
-		for(int i = 0; i < shortenedCurrentPath.size() - 1; i++) {
-			p.append("../");
-		}
-		
-		FilesystemPath shortenedTargetPath = FilesystemPath.removeCommonParent(toPath, this);
-		p.append(shortenedTargetPath.asString());
-		
-		return p.toString();    	
-    }
-    
-    public String asString() {
-    	return toString();
-    }
-
-    public int size() {
-        return elements.size();
-    }    
-    
     public File asFile() {
-        return new File(this.asString());
+        return new File(this.toString());
     }
-
+    
     @Override
+	public int compareTo(FilesystemPath arg0) {
+		return toString().compareTo(arg0.toString());
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -244,17 +297,24 @@ public class FilesystemPath {
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < elements.size(); i++) {
-            if(isAbsolute || i > 0) {
-                sb.append("/");
-            }
-            sb.append(elements.get(i));
+        if(isAbsolute && elements.size() == 0) {
+        	sb.append("/");
+        } else {
+	        for(int i = 0; i < elements.size(); i++) {
+	            if(isAbsolute || i > 0) {
+	                sb.append("/");
+	            }
+	            sb.append(elements.get(i));
+	        }
         }
         return sb.toString();
     }
 
+    private boolean isAbsolute;
+    private List<String> elements;
+	
     /*
-     * Static filesystem path operations.
+     * Static Operations
      */
     
     public static String normalize(String pathString) {
@@ -270,7 +330,7 @@ public class FilesystemPath {
         return pathString;
     }
 
-    public static String removeExtension(String pathString) {
+    private static String removeExtension(String pathString) {
         int extensionStartIndex = pathString.lastIndexOf(".");
         if(extensionStartIndex != -1) {
             return pathString.substring(0, extensionStartIndex);
@@ -279,15 +339,11 @@ public class FilesystemPath {
         }
     }
     
-    public static FilesystemPath removeCommonParent(FilesystemPath path, FilesystemPath pathComparedTo) {
-    	FilesystemPath outputPath = path;
-    	FilesystemPath parallelPath = pathComparedTo;
-    	
-    	while(outputPath.size() > 0 && parallelPath.size() > 0 && outputPath.get(0).equals(parallelPath.get(0))) {
-    		outputPath = outputPath.removeFirst();
-    		parallelPath = parallelPath.removeFirst();
+    public static List<FilesystemPath> removeCommonParent(List<FilesystemPath> paths, FilesystemPath otherPath) {
+    	List<FilesystemPath> trimmedPaths = new ArrayList<FilesystemPath>();
+    	for(FilesystemPath path : paths) {
+    		trimmedPaths.add(path.removeCommonParent(otherPath));
     	}
-    	
-    	return outputPath;
+    	return trimmedPaths;
     }
 }
