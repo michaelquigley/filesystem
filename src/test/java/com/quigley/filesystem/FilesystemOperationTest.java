@@ -30,7 +30,7 @@ public class FilesystemOperationTest {
 	}
 	
 	@Test
-	public void testCopyTree() throws IOException {
+	public void testCopyAndDeleteTree() throws IOException {
 		FilesystemPath dest = createTempFolder();
 		log.info("dest = " + dest);
 

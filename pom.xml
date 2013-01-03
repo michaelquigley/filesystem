@@ -1,12 +1,6 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-
 	<groupId>com.quigley</groupId>
 	<artifactId>filesystem</artifactId>
 
@@ -39,7 +33,7 @@
 	</developers>
 
 	<properties>
-		<slf4j.version>1.6.6</slf4j.version>
+		<slf4j.version>1.7.2</slf4j.version>
 	</properties>
 
 	<dependencies>
