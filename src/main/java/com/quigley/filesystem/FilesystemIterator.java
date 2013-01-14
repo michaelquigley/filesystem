@@ -34,10 +34,14 @@ public class FilesystemIterator {
     }
 
     public void iterate(FilesystemPath path) throws FilesystemException {
-    	iterate(path, true);
+    	iterate(path, 0, -1);
     }
     
-    public void iterate(FilesystemPath path, boolean recursive) throws FilesystemException {
+    public void iterate(FilesystemPath path, int maxDepth) {
+    	iterate(path, 0, maxDepth);
+    }
+    
+    private void iterate(FilesystemPath path, int currentDepth, int maxDepth) throws FilesystemException {
     	File pathF = path.asFile();
     	if(pathF.exists() && pathF.canRead()) {
     		visit(path);
@@ -45,8 +49,8 @@ public class FilesystemIterator {
     			File[] contents = pathF.listFiles();
     			for(File f : contents) {
     				FilesystemPath fPath = new FilesystemPath(path).add(f.getName());
-    				if(recursive) {
-    					iterate(fPath, recursive);
+    				if(currentDepth < maxDepth || maxDepth == -1) {
+    					iterate(fPath, currentDepth + 1, maxDepth);
     				} else {
     					visit(fPath);
     				}
