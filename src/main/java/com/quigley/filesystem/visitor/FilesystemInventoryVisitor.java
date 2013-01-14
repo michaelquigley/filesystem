@@ -36,7 +36,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		if(includeTokens != null && includeTokens.size() > 0) {
 			include = false;
 			for(String includeToken : includeTokens) {
-				if(path.toString().indexOf(includeToken) != -1) {
+				if(path.toString().matches(includeToken)) {
 					include = true;
 					break;
 				}
@@ -45,7 +45,7 @@ public class FilesystemInventoryVisitor implements FilesystemVisitor {
 		boolean exclude = false;
 		if(excludeTokens != null && excludeTokens.size() > 0) {
 			for(String excludeToken : excludeTokens) {
-				if(path.toString().indexOf(excludeToken) != -1) {
+				if(path.toString().matches(excludeToken)) {
 					exclude = true;
 					break;
 				}
