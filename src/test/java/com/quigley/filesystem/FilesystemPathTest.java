@@ -190,7 +190,7 @@ public class FilesystemPathTest {
     	assertTrue(source.removeFirst(3).toString().equals(""));
     	
     	source = new FilesystemPath("/a/b/c");
-    	assertTrue(source.removeFirst(3).toString().equals(""));
+    	assertEquals("/", source.removeFirst(3).toString());
     }
     
     @Test
@@ -252,9 +252,9 @@ public class FilesystemPathTest {
     
     @Test
     public void testToAbsolute1() {
-    	FilesystemPath path = new FilesystemPath(".").toAbsolute();
+    	FilesystemPath path = new FilesystemPath(".").makeAbsolute();
     	System.out.println("Absolute: " + path);
-    	path = new FilesystemPath("src/java").toAbsolute();
+    	path = new FilesystemPath("src/java").makeAbsolute();
     	System.out.println("Absolute: " + path);
     }
     

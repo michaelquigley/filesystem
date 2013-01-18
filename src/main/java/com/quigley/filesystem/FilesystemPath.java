@@ -53,7 +53,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         for(int i = 0; i < source.size(); i++) {
             elements.add(source.get(i));
         }
-        isAbsolute = source.isAbsolute();
+        isAbsolute = source.isAbsolute;
     }
     
     public FilesystemPath(List<String> elements) {
@@ -64,19 +64,18 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
      * Absolute
      */
 
-    public FilesystemPath toAbsolute() {
-    	FilesystemPath absolutePath = new FilesystemPath(this.asFile().getAbsolutePath());
-    	if(absolutePath.getLast().equals(".")) {
-    		absolutePath = absolutePath.removeLast();
-    	}
+    public FilesystemPath makeAbsolute() {
+    	FilesystemPath absolutePath = new FilesystemPath(this.asFile().getAbsolutePath()).setAbsolute(true);
     	return absolutePath;
     }
     
     public boolean isAbsolute() {
         return isAbsolute;
     }
-    public void setAbsolute(boolean absolute) {
-        isAbsolute = absolute;
+    public FilesystemPath setAbsolute(boolean absolute) {
+        FilesystemPath absolutePath = new FilesystemPath(elements);
+        absolutePath.isAbsolute = true;
+        return absolutePath;
     }
 
     /*
@@ -89,7 +88,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         elementsCopy.add(element);
         
         FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-        pathCopy.setAbsolute(isAbsolute);
+        pathCopy.isAbsolute = isAbsolute;
         
         return pathCopy;
     }
@@ -102,7 +101,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         }
 
         FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-        pathCopy.setAbsolute(isAbsolute);
+        pathCopy.isAbsolute = isAbsolute;
         
         return pathCopy;
     }
@@ -113,7 +112,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         elementsCopy.set(idx, component);
 
         FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-        pathCopy.setAbsolute(isAbsolute);
+        pathCopy.isAbsolute = isAbsolute;
         
         return pathCopy;
     }    
@@ -124,7 +123,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         elementsCopy.remove(idx);
         
         FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-        pathCopy.setAbsolute(isAbsolute);
+        pathCopy.isAbsolute = isAbsolute;
         
         return pathCopy;
     }
@@ -135,6 +134,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	elementsCopy.remove(0);
     	
     	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
+    	pathCopy.isAbsolute = isAbsolute;
     	
     	return pathCopy;
     }
@@ -145,6 +145,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	elementsCopy = elementsCopy.subList(count, elementsCopy.size());
     	
     	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
+    	pathCopy.isAbsolute = isAbsolute;
     	
     	return pathCopy;
     }
@@ -155,7 +156,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	elementsCopy.remove(elements.size() - 1);
     	
     	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-    	pathCopy.setAbsolute(isAbsolute);
+    	pathCopy.isAbsolute = isAbsolute;
     	
     	return pathCopy;
     }
@@ -171,7 +172,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	}
     	
     	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
-    	pathCopy.setAbsolute(isAbsolute);
+    	pathCopy.isAbsolute = isAbsolute;
     	
     	return pathCopy;
     }
@@ -183,6 +184,10 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	while(outputPath.size() > 0 && parallelPath.size() > 0 && outputPath.get(0).equals(parallelPath.get(0))) {
     		outputPath = outputPath.removeFirst();
     		parallelPath = parallelPath.removeFirst();
+    	}
+
+    	if(!outputPath.equals(otherPath)) {
+    		outputPath.isAbsolute = false;
     	}
     	
     	return outputPath;
@@ -209,7 +214,10 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     			saw = true;
     		}
     	}
-    	return new FilesystemPath(elementsCopy);
+    	FilesystemPath pathCopy = new FilesystemPath(elementsCopy);
+    	pathCopy.isAbsolute = isAbsolute;
+
+    	return pathCopy;
     }
 
     /*
@@ -255,17 +263,22 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     }    
     
     public FilesystemPath removeExtension() {
-    	return new FilesystemPath(removeExtension(this.toString()));
+    	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.toString()));
+    	pathCopy.isAbsolute = isAbsolute;
+    	return pathCopy;
     }
     
     public FilesystemPath setExtension(String extension) {
     	FilesystemPath pathCopy = new FilesystemPath(removeExtension(this.toString()));
     	pathCopy = new FilesystemPath(pathCopy.toString() + "." + extension);
+    	pathCopy.isAbsolute = isAbsolute;
     	return pathCopy;
     }
     
     public FilesystemPath addExtension(String extension) {
-    	return new FilesystemPath(this.toString() + "." + extension);
+    	FilesystemPath pathCopy = new FilesystemPath(this.toString() + "." + extension);
+    	pathCopy.isAbsolute = isAbsolute;
+    	return pathCopy;
     }
     
     /*
@@ -344,7 +357,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     
     public static FilesystemPath currentWorkingDirectory() {
     	File cwd = new File(".");
-    	return new FilesystemPath(cwd.getAbsolutePath()).simplify();
+    	return new FilesystemPath(cwd.getAbsolutePath()).setAbsolute(true).simplify();
     }
     
     public static String normalize(String pathString) {
