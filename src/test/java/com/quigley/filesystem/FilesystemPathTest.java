@@ -286,4 +286,28 @@ public class FilesystemPathTest {
     	assertEquals("a", path.getLast());
     	assertEquals("/a", path.toString());
     }
+    
+    @Test
+    public void testSimplify() {
+    	FilesystemPath path = new FilesystemPath("a/b/../c");
+    	FilesystemPath simplified = path.simplify();
+    	assertNotNull(simplified);
+    	assertEquals("a/c", simplified.toString());
+    	
+    	path = new FilesystemPath("../../a");
+    	simplified = path.simplify();
+    	assertEquals(path.toString(), simplified.toString());
+    	
+    	path = new FilesystemPath("a/..");
+    	simplified = path.simplify();
+    	assertEquals("", simplified.toString());
+    	
+    	path = new FilesystemPath(".");
+    	simplified = path.simplify();
+    	assertEquals("", simplified.toString());
+    	
+    	path = new FilesystemPath("../a/b/../c/d/../e/f/../../g");
+    	simplified = path.simplify();
+    	assertEquals("../a/c/g", simplified.toString());
+    }
 }

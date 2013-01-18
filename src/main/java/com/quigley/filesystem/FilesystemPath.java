@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class FilesystemPath implements Comparable<FilesystemPath> {
 	
@@ -186,6 +187,30 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	
     	return outputPath;
     }
+    
+    public FilesystemPath simplify() {
+    	List<String> elementsCopy = new ArrayList<String>(elements);
+    	ListIterator<String> i = elementsCopy.listIterator();
+    	boolean saw = false;
+    	while(i.hasNext()) {
+    		String value = i.next();
+    		if(value.equals(".")) {
+    			i.remove();
+    		} else
+    		if(value.equals("..")) {
+    			if(saw) {
+    				if(i.hasPrevious()) {
+    					i.remove();
+    					i.previous();
+    					i.remove();
+    				}
+    			}
+    		} else {
+    			saw = true;
+    		}
+    	}
+    	return new FilesystemPath(elementsCopy);
+    }
 
     /*
      * Component Accessors
@@ -316,6 +341,11 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     /*
      * Static Operations
      */
+    
+    public static FilesystemPath currentWorkingDirectory() {
+    	File cwd = new File(".");
+    	return new FilesystemPath(cwd.getAbsolutePath()).simplify();
+    }
     
     public static String normalize(String pathString) {
         while(pathString.indexOf("\\") != -1) {
