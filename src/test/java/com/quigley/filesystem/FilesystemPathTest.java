@@ -310,4 +310,19 @@ public class FilesystemPathTest {
     	simplified = path.simplify();
     	assertEquals("../a/c/g", simplified.toString());
     }
+    
+    @Test
+    public void testWindowsAbsolute() {
+    	FilesystemPath path = new FilesystemPath("c:/a/long/path");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("c:/a/long/path", path.toString());
+    	
+    	path = new FilesystemPath("G:/");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("G:/", path.toString());
+    	
+    	path = new FilesystemPath("/a/long/path");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("/a/long/path", path.toString());
+    }
 }
