@@ -190,7 +190,7 @@ public class FilesystemPathTest {
     	assertTrue(source.removeFirst(3).toString().equals(""));
     	
     	source = new FilesystemPath("/a/b/c");
-    	assertTrue(source.removeFirst(3).toString().equals(""));
+    	assertEquals("/", source.removeFirst(3).toString());
     }
     
     @Test
@@ -252,9 +252,9 @@ public class FilesystemPathTest {
     
     @Test
     public void testToAbsolute1() {
-    	FilesystemPath path = new FilesystemPath(".").toAbsolute();
+    	FilesystemPath path = new FilesystemPath(".").makeAbsolute();
     	System.out.println("Absolute: " + path);
-    	path = new FilesystemPath("src/java").toAbsolute();
+    	path = new FilesystemPath("src/java").makeAbsolute();
     	System.out.println("Absolute: " + path);
     }
     
@@ -285,5 +285,44 @@ public class FilesystemPathTest {
     	assertEquals(1, path.size());
     	assertEquals("a", path.getLast());
     	assertEquals("/a", path.toString());
+    }
+    
+    @Test
+    public void testSimplify() {
+    	FilesystemPath path = new FilesystemPath("a/b/../c");
+    	FilesystemPath simplified = path.simplify();
+    	assertNotNull(simplified);
+    	assertEquals("a/c", simplified.toString());
+    	
+    	path = new FilesystemPath("../../a");
+    	simplified = path.simplify();
+    	assertEquals(path.toString(), simplified.toString());
+    	
+    	path = new FilesystemPath("a/..");
+    	simplified = path.simplify();
+    	assertEquals("", simplified.toString());
+    	
+    	path = new FilesystemPath(".");
+    	simplified = path.simplify();
+    	assertEquals("", simplified.toString());
+    	
+    	path = new FilesystemPath("../a/b/../c/d/../e/f/../../g");
+    	simplified = path.simplify();
+    	assertEquals("../a/c/g", simplified.toString());
+    }
+    
+    @Test
+    public void testWindowsAbsolute() {
+    	FilesystemPath path = new FilesystemPath("c:/a/long/path");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("c:/a/long/path", path.toString());
+    	
+    	path = new FilesystemPath("G:/");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("G:/", path.toString());
+    	
+    	path = new FilesystemPath("/a/long/path");
+    	assertTrue(path.isAbsolute());
+    	assertEquals("/a/long/path", path.toString());
     }
 }

@@ -1,22 +1,16 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-
 	<groupId>com.quigley</groupId>
 	<artifactId>filesystem</artifactId>
 
 	<packaging>jar</packaging>
 
-	<name>Filesystem Framework</name>
-	<version>0.0.2</version>
+	<name>Filesystem</name>
+	<version>0.0.3</version>
 	<url>http://www.quigley.com/</url>
 	<description>
-		The Filesystem Framework provides smart file system path manipulation functions, and provides operations for working on file system trees.
+		The Filesystem framework provides simple file system path manipulation functions, and provides components for working with trees of files.
 	</description>
 	<licenses>
 		<license>
@@ -39,7 +33,7 @@
 	</developers>
 
 	<properties>
-		<slf4j.version>1.6.6</slf4j.version>
+		<slf4j.version>1.7.2</slf4j.version>
 	</properties>
 
 	<dependencies>
