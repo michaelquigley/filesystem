@@ -25,22 +25,22 @@ public class FilesystemIteratorTest {
 
     @Test
     public void testIterationStartingWithFile() throws Exception {
-    	FilesystemPath root = new FilesystemPath("pom.xml");
+    	FilesystemPath root = new FilesystemPath("build.gradle");
     	TestVisitor visitor = new TestVisitor();
     	FilesystemIterator iter = new FilesystemIterator(visitor);
     	iter.iterate(root);
-    	
+
     	List<FilesystemPath> pathList = visitor.getPathList();
     	assertTrue(pathList.size() == 1);
-    	assertTrue(pathList.get(0).toString().equals("pom.xml"));
+    	assertTrue(pathList.get(0).toString().equals("build.gradle"));
     }
-    
+
     @Test(expected = FilesystemException.class)
     public void testIterationStartingWithInvalid() {
     	FilesystemIterator iter = new FilesystemIterator(null);
     	iter.iterate(new FilesystemPath("/in/va/li/d"));
     }
-    
+
     private class TestVisitor implements FilesystemVisitor {
         private List<FilesystemPath> pathList;
 
@@ -57,6 +57,6 @@ public class FilesystemIteratorTest {
             pathList.add(path);
         }
     }
-    
+
     private static Logger log = LoggerFactory.getLogger(FilesystemIteratorTest.class);
 }
