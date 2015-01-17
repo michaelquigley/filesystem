@@ -23,6 +23,7 @@ import com.quigley.filesystem.json.FilesystemPathDeserializer;
 import com.quigley.filesystem.json.FilesystemPathSerializer;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -304,9 +305,12 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	return false;
     }
 
-
     public File asFile() {
         return new File(this.toString());
+    }
+
+    public Path asPath() {
+        return asFile().toPath();
     }
 
     @Override
