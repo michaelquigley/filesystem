@@ -26,9 +26,9 @@ public class FilesystemSizeFormatter {
 		}
 		
 		if(sizeInBytes < MEGABYTE) {
-			float kilobytes = ((float) sizeInBytes) / ((float) KILOBYTE);
-			float remainder = ((float) sizeInBytes) % ((float) KILOBYTE);
-			if(remainder == 0.0F) {
+			double kilobytes = ((double) sizeInBytes) / ((double) KILOBYTE);
+			double remainder = ((double) sizeInBytes) % ((double) KILOBYTE);
+			if(remainder == 0.0) {
 				return integerFormatter.format(kilobytes) + " KiB";
 			} else {
 				return formatter.format(kilobytes) + " KiB";
@@ -36,9 +36,9 @@ public class FilesystemSizeFormatter {
 		}
 
 		if(sizeInBytes < GIGABYTE) {
-			float megabytes = ((float) sizeInBytes) / ((float) MEGABYTE);
-			float remainder = ((float) sizeInBytes) % ((float) MEGABYTE);
-			if(remainder == 0.0F) {
+			double megabytes = ((double) sizeInBytes) / ((double) MEGABYTE);
+			double remainder = ((double) sizeInBytes) % ((double) MEGABYTE);
+			if(remainder == 0.0) {
 				return integerFormatter.format(megabytes) + " MiB";
 			} else {
 				return formatter.format(megabytes) + " MiB";
@@ -46,9 +46,9 @@ public class FilesystemSizeFormatter {
 		}
 		
 		if(sizeInBytes < TERABYTE) {
-			float gigabytes = ((float) sizeInBytes) / ((float) GIGABYTE);
-			float remainder = ((float) sizeInBytes) % ((float) GIGABYTE);
-			if(remainder == 0.0F) {
+			double gigabytes = ((double) sizeInBytes) / ((double) GIGABYTE);
+			double remainder = ((double) sizeInBytes) % ((double) GIGABYTE);
+			if(remainder == 0.0) {
 				return integerFormatter.format(gigabytes) + " GiB";
 			} else {
 				return formatter.format(gigabytes) + " GiB";
@@ -56,18 +56,18 @@ public class FilesystemSizeFormatter {
 		}
 		
 		if(sizeInBytes < PETABYTE) {
-			float terabytes = sizeInBytes / TERABYTE;
-			float remainder = sizeInBytes % TERABYTE;
-			if(remainder == 0.0F) {
+			double terabytes = ((double) sizeInBytes) / ((double) TERABYTE);
+			double remainder = ((double) sizeInBytes) % ((double) TERABYTE);
+			if(remainder == 0.0) {
 				return integerFormatter.format(terabytes) + " TiB";
 			} else {
 				return formatter.format(terabytes) + " TiB";
 			}
 		}
 		
-		float petabytes = sizeInBytes / PETABYTE;
-		float remainder = sizeInBytes % PETABYTE;
-		if(remainder == 0.0F) {
+		double petabytes = ((double) sizeInBytes) / ((double) PETABYTE);
+		double remainder = ((double) sizeInBytes) % ((double) PETABYTE);
+		if(remainder == 0.0) {
 			return integerFormatter.format(petabytes) + " PiB";
 		} else {
 			return formatter.format(petabytes) + " PiB";
