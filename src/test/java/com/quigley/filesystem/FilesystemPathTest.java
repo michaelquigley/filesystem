@@ -325,4 +325,14 @@ public class FilesystemPathTest {
     	assertTrue(path.isAbsolute());
     	assertEquals("/a/long/path", path.toString());
     }
+
+    @Test
+    public void testStartsWith() {
+        FilesystemPath p = new FilesystemPath("a/b/c");
+        assertFalse(p.startsWith(null));
+        assertTrue(p.startsWith(new FilesystemPath("a")));
+        assertTrue(p.startsWith(new FilesystemPath("a/b")));
+        assertTrue(p.startsWith(new FilesystemPath("a/b/c")));
+        assertFalse(p.startsWith(new FilesystemPath("a/b/c/d")));
+    }
 }

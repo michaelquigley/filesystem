@@ -305,6 +305,23 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	return false;
     }
 
+    public boolean startsWith(FilesystemPath otherPath) {
+        if(otherPath == null) {
+            return false;
+        }
+        if(elements.size() >= otherPath.size()) {
+            for(int i = 0; i < otherPath.size(); i++) {
+                if(!elements.get(i).equals(otherPath.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
     public File asFile() {
         return new File(this.toString());
     }
