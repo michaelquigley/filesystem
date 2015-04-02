@@ -335,4 +335,44 @@ public class FilesystemPathTest {
         assertTrue(p.startsWith(new FilesystemPath("a/b/c")));
         assertFalse(p.startsWith(new FilesystemPath("a/b/c/d")));
     }
+
+    @Test
+    public void testTail() {
+        FilesystemPath p = new FilesystemPath("a/b/c");
+        assertEquals(new FilesystemPath("a/b/c"), p.tail(0));
+        assertEquals(new FilesystemPath("b/c"), p.tail(1));
+        assertEquals(new FilesystemPath("c"), p.tail(2));
+    }
+
+    @Test(expected = FilesystemException.class)
+    public void testTailPastEnd() {
+        new FilesystemPath("a").tail(1);
+    }
+
+    @Test(expected = FilesystemException.class)
+    public void testTailBeforeStart() {
+        new FilesystemPath("a").tail(-1);
+    }
+
+    @Test
+    public void testNavigate() {
+        FilesystemPath source = new FilesystemPath("a/b/c");
+        assertEquals(new FilesystemPath("d"), source.navigate(new FilesystemPath("a/b/d")));
+        assertEquals(new FilesystemPath("../d"), source.navigate(new FilesystemPath("a/d")));
+        assertEquals(new FilesystemPath("d/e"), source.navigate(new FilesystemPath("a/b/d/e")));
+
+        source = new FilesystemPath("a");
+        assertEquals(new FilesystemPath("b"), source.navigate(new FilesystemPath("b")));
+        assertEquals(new FilesystemPath("b/c"), source.navigate(new FilesystemPath("b/c")));
+    }
+
+    @Test(expected = FilesystemException.class)
+    public void testNavigateAbsoluteMismatch() {
+        new FilesystemPath("/a/b").navigate(new FilesystemPath("a/c"));
+    }
+
+    @Test(expected = FilesystemException.class)
+    public void testNavigateToNull() {
+        new FilesystemPath("a/b").navigate(null);
+    }
 }

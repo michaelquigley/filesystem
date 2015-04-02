@@ -188,6 +188,20 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	return pathCopy;
     }
 
+    public FilesystemPath tail(int startIndex) {
+        if(startIndex < 0) {
+            throw new FilesystemException("Tail before start");
+        }
+        if(startIndex >= elements.size()) {
+            throw new FilesystemException("Tail past end");
+        }
+        List<String> tail = new ArrayList<>();
+        for(int i = startIndex; i < elements.size(); i++) {
+            tail.add(elements.get(i));
+        }
+        return new FilesystemPath(tail);
+    }
+
     public FilesystemPath removeCommonParent(FilesystemPath otherPath) {
     	FilesystemPath outputPath = this;
     	FilesystemPath parallelPath = otherPath;
@@ -229,6 +243,32 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     	pathCopy.isAbsolute = isAbsolute;
 
     	return pathCopy;
+    }
+
+    public FilesystemPath navigate(FilesystemPath destination) {
+        if(destination == null) {
+            throw new FilesystemException("Cannot navigate to null path");
+        }
+        if(this.isAbsolute() != destination.isAbsolute()) {
+            throw new FilesystemException("Absolute/non-absolute mismatch");
+        }
+
+        int divergencePoint = 0;
+        for(; divergencePoint < elements.size() && divergencePoint < destination.size(); divergencePoint++) {
+            if(!elements.get(divergencePoint).equals(destination.get(divergencePoint)))
+                break;
+        }
+
+        List<String> relativeElements = new ArrayList<>();
+        for(int i = 0; i < (elements.size() - 1 - divergencePoint); i++) {
+            relativeElements.add("..");
+        }
+
+        FilesystemPath destinationTail = destination.tail(divergencePoint);
+        relativeElements.addAll(destinationTail.elements);
+
+        FilesystemPath relative = new FilesystemPath(relativeElements);
+        return relative;
     }
 
     /*
