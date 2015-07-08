@@ -362,6 +362,10 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
         }
     }
 
+    /*
+     * Conversion
+     */
+
     public File asFile() {
         return new File(this.toString());
     }
@@ -369,6 +373,38 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
     public Path asPath() {
         return asFile().toPath();
     }
+
+    /*
+     * Proxy methods
+     */
+
+    public boolean exists() {
+        return asFile().exists();
+    }
+
+    public boolean isDirectory() {
+        return asFile().isDirectory();
+    }
+
+    public boolean isFile() {
+        return asFile().isFile();
+    }
+
+    public boolean canRead() {
+        return asFile().canRead();
+    }
+
+    public boolean canWrite() {
+        return asFile().canWrite();
+    }
+
+    public boolean canExecute() {
+        return asFile().canExecute();
+    }
+
+    /*
+     * Overrides
+     */
 
     @Override
 	public int compareTo(FilesystemPath arg0) {
@@ -404,6 +440,7 @@ public class FilesystemPath implements Comparable<FilesystemPath> {
 		return true;
 	}
 
+    @Override
 	public String toString() {
         boolean leadingSlash = isAbsolute;
        	if(isAbsolute && elements.size() > 0 && elements.get(0).matches("[a-zA-Z]\\:")) {
