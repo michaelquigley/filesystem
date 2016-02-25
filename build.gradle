@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
-version = '6'
+version = '7'
 group = 'com.quigley'
 
 compileJava {
