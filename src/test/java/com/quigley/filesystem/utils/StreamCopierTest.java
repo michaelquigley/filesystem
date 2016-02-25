@@ -3,7 +3,7 @@ package com.quigley.filesystem.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class StreamCopierTest {
 		String outString = new String(out.toByteArray());
 		assertTrue(inString.equals(outString));
 	}
-	
+
 	@Test
 	public void testStreamCopierBigData() throws IOException {
 		String blockString = "FFFFFFFFFFFFFFFF";
