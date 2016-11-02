@@ -86,6 +86,10 @@ public class FilesystemOperation {
 		return copiedFiles;
 	}
 
+	public static String readFileAsString(FilesystemPath path) throws IOException {
+		return readFileAsString(path.asFile());
+	}
+
 	public static String readFileAsString(File path) throws IOException {
 		FileInputStream in = new FileInputStream(path);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -94,7 +98,11 @@ public class FilesystemOperation {
 		out.close();
 		return new String(out.toByteArray());
 	}
-	
+
+	public static void writeStringToFile(String data, FilesystemPath path) throws IOException {
+		writeStringToFile(data, path.asFile());
+	}
+
 	public static void writeStringToFile(String data, File path) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(data.getBytes());
 		FileOutputStream out = new FileOutputStream(path);
